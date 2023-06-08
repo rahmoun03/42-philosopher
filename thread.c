@@ -6,24 +6,51 @@
 /*   By: arahmoun <arahmoun@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 10:30:53 by arahmoun          #+#    #+#             */
-/*   Updated: 2023/06/07 12:29:21 by arahmoun         ###   ########.fr       */
+/*   Updated: 2023/06/08 14:17:16 by arahmoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+int		g_all = 0;
 
-void	*PrintHello(void *philos)
+int	get_time(void)
 {
-	t_philo *tmp;
+	struct timeval time;
+	gettimeofday(&time, NULL);
+	return (time.tv_usec);
+}
 
+void	*routine(void *philos)
+{
+	t_philo	*tmp;
+	
 	tmp = (t_philo *)philos;
-	printf("creating thread, %d\n", tmp->id);
-	for (int i = 0; i < 4; i++)
+	tmp->time = get_time();
+	while(1)
 	{
-		printf("philo %d is working %d time\n", tmp->id, i + 1);
+		if (tmp->u_fork == 0)
+		{
+			pthread_mutex_lock(&tmp->fork);
+			tmp->u_fork = 1;
+			if (tmp->next->u_fork == 0)
+			{
+				tmp->next->u_fork = 1;
+				pthread_mutex_lock(&tmp->next->fork);
+				printf("creating thread, %d\n", tmp->id);
+				for (int i = 0; i < 4; i++)
+				{
+					printf("%d philo %d is working %d time\n", tmp->time, tmp->id, i + 1);
+				}
+				g_all++;
+				pthread_mutex_unlock(&tmp->next->fork);
+				tmp->next->u_fork = 0;
+			}
+			pthread_mutex_unlock(&tmp->fork);
+			tmp->u_fork = 0;
+		}
 	}
-	return(philos);
+	return (philos);
 }
 
 void	ft_lstadd_back(t_philo **lst, t_philo *new_)
@@ -41,18 +68,23 @@ void	ft_lstadd_back(t_philo **lst, t_philo *new_)
 	tmp->next = new_;
 }
 
-t_philo	*init_philo(int id, int ac, char **av, t_philo *last){
+t_philo	*init_philo(int id, int ac, char **av, t_philo *last)
+{
 	t_philo	*philos;
 
 	philos = (t_philo *)malloc(sizeof(t_philo));
 	philos->data = (t_data *)malloc(sizeof(t_data));
 	philos->id = id;
+	philos->time = 0;
+	philos->time_die = 0;
+	philos->time_sleep = 0;
+	philos->u_fork = 0;
 	pthread_mutex_init(&philos->fork, NULL);
 	philos->data->number = ft_atoi(av[1]);
 	philos->data->death = ft_atoi(av[2]);
 	philos->data->eat = ft_atoi(av[3]);
 	philos->data->sleep = ft_atoi(av[4]);
-	if(ac == 6)
+	if (ac == 6)
 		philos->data->must = ft_atoi(av[5]);
 	else
 		philos->data->must = -1;
@@ -61,15 +93,17 @@ t_philo	*init_philo(int id, int ac, char **av, t_philo *last){
 	return (philos);
 }
 
-int	creat_thread(t_philo *philos){
-	int i;
-	t_philo *tmp;
+int	creat_thread(t_philo *philos)
+{
+	int		i;
+	t_philo	*tmp;
 
 	i = 0;
 	tmp = philos;
+	
 	while (i < philos->data->number)
 	{
-		if(pthread_create(&philos->threads, NULL, PrintHello, tmp))
+		if (pthread_create(&tmp->threads, NULL, routine, tmp))
 		{
 			printf("Error:unable to create thread\n");
 			return (0);
@@ -82,9 +116,9 @@ int	creat_thread(t_philo *philos){
 
 int	start_t(int ac, char **av)
 {
-	t_philo *philos;
-	int i;
-	int number;
+	t_philo	*philos;
+	int		i;
+	int		number;
 
 	i = 0;
 	philos = NULL;
@@ -99,5 +133,6 @@ int	start_t(int ac, char **av)
 	}
 	if (!creat_thread(philos))
 		return (0);
+	printf("         %d\n", g_all);
 	return (1);
 }
