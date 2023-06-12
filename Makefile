@@ -1,4 +1,4 @@
-SRC = philo.c ft_atoi.c thread.c
+SRC = philo.c ft_atoi.c thread.c main.c
 
 CFLAGS = -Wall -Wextra -Werror -pthread -fsanitize=address -g3
 

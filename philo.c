@@ -6,7 +6,7 @@
 /*   By: arahmoun <arahmoun@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 13:04:36 by arahmoun          #+#    #+#             */
-/*   Updated: 2023/06/08 10:15:24 by arahmoun         ###   ########.fr       */
+/*   Updated: 2023/06/09 18:21:01 by arahmoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,28 +34,37 @@ t_data	*init_data(char **av, int ac)
 	return (data);
 }
 
-int	check_data(int ac, char **av)
+int	check_data(int ac, t_data *data)
 {
-	t_data	*data;
-
-	data = init_data(av, ac);
-	if (data->number <= 0 || data->number > 200 || data->death < 0
-		|| data->eat < 0 || data->sleep < 0)
-		return (0);
-	return (1);
-}
-
-int	main(int ac, char **av)
-{
-	if (ac == 5 || ac == 6)
-	{
-		if (!check_data(ac, av))
+	if ((data->number <= 0) || (data->number > 200) || (data->death < 0)
+		|| (data->eat < 0) || (data->sleep < 0)
+		|| (ac == 6 && data->must <= 0))
 		{
-			printf("Error\n");
+			printf("Error : %sthe parameter ",YOLLOW);
+			printf("is not valid %s\n", DEFFAULT);
+			free(data);
 			return (1);
 		}
-		start_t(ac, av);
+	return (0);
+}
+
+int	just_digit(char **v)
+{
+	int	i;
+	int	j;
+
+	i = 1;
+	j = 0;
+	while (v[i])
+	{
+		j = 0;
+		while (v[i][j])
+		{
+			if ((v[i][j] < '0' || v[i][j] > '9') && j != 0)
+				return (1);
+			j++;
+		}
+		i++;
 	}
-	else
-		printf("Error : you must at lest enter 5 argument\n");
+	return (0);
 }
