@@ -6,7 +6,7 @@
 /*   By: arahmoun <arahmoun@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 10:30:53 by arahmoun          #+#    #+#             */
-/*   Updated: 2023/06/14 20:56:42 by arahmoun         ###   ########.fr       */
+/*   Updated: 2023/06/14 22:25:25 by arahmoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	*routine(void *philos)
 		print_func(i + 1, philo, (char *)"has taken a fork");
 		pthread_mutex_lock(philo[(i + 1) % philo->data->number].fork);
 		print_func(i + 1, philo, (char *)"has taken a fork");
-		print_func(i + 1, philo, (char *)"is eating ...");
+		print_func(i + 1, philo, (char *)"is eating");
 		if (++philo[i].eat == philo[i].data->must)
 			philo->total_eat++;
 		ft_sleep((size_t)philo->data->eat);

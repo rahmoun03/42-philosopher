@@ -6,7 +6,7 @@
 /*   By: arahmoun <arahmoun@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 13:04:36 by arahmoun          #+#    #+#             */
-/*   Updated: 2023/06/14 20:58:02 by arahmoun         ###   ########.fr       */
+/*   Updated: 2023/06/14 22:33:53 by arahmoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,20 @@ t_data	*init_data(char **av, int ac)
 	return (data);
 }
 
+int	ft_er(void)
+{
+	printf("Error : %sthe parameter ", YOLLOW);
+	printf("is not valid %s\n", DEFFAULT);
+	return (1);
+}
+
 int	check_data(int ac, t_data *data)
 {
 	if ((data->number <= 0) || (data->number > 200) || (data->death < 0)
 		|| (data->eat < 0) || (data->sleep < 0) || (ac == 6 && data->must < 0))
 	{
-		printf("Error : %sthe parameter ", YOLLOW);
-		printf("is not valid %s\n", DEFFAULT);
 		free(data);
-		return (1);
+		return (ft_er());
 	}
 	if (ac == 6 && data->must == 0)
 	{

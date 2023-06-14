@@ -6,7 +6,7 @@
 /*   By: arahmoun <arahmoun@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 15:25:52 by arahmoun          #+#    #+#             */
-/*   Updated: 2023/06/14 20:03:43 by arahmoun         ###   ########.fr       */
+/*   Updated: 2023/06/14 22:34:05 by arahmoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	main(int ac, char **av)
 	if (ac == 5 || ac == 6)
 	{
 		if (just_digit(av))
-			return (ft_error());
+			return (ft_er());
 		data = init_data(av, ac);
 		if (check_data(ac, data))
 			return (1);

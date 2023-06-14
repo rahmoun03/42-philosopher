@@ -6,7 +6,7 @@
 /*   By: arahmoun <arahmoun@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 19:15:42 by arahmoun          #+#    #+#             */
-/*   Updated: 2023/06/14 20:57:38 by arahmoun         ###   ########.fr       */
+/*   Updated: 2023/06/14 22:33:22 by arahmoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,6 @@ int					just_digit(char **v);
 size_t				get_time(void);
 void				ft_sleep(size_t timming);
 int					ft_error(void);
+int					ft_er(void);
 
 #endif
