@@ -6,7 +6,7 @@
 /*   By: arahmoun <arahmoun@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 15:25:52 by arahmoun          #+#    #+#             */
-/*   Updated: 2023/06/12 12:06:24 by arahmoun         ###   ########.fr       */
+/*   Updated: 2023/06/14 14:01:30 by arahmoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,19 @@ int	ft_error(void)
 	return (1);
 }
 
+void	dest_mutex(t_philo *philo)
+{
+	int	i;
+
+	i = 0;
+	while (i < philo->data->number)
+	{
+		pthread_mutex_destroy(&philo[i].fork);
+		pthread_mutex_destroy(&philo[i].writing);
+		i++;
+	}
+}
+
 void	loop_func(t_philo *philo, t_data *data)
 {
 	int	i;
@@ -28,17 +41,18 @@ void	loop_func(t_philo *philo, t_data *data)
 	{
 		if (philo[i].total_eat == philo[i].data->number)
 		{
-			// dest_mutex(philo);
+			dest_mutex(philo);
 			// free_param(philo, philo->mutex, var);
 			return ;
 		}
-		if (get_time() - philo[i].time_meal
+		if (get_time() - philo[i].last_meal
 			> (size_t )data->death)
 		{
 			usleep(100);
-			pthread_mutex_lock(philo->writing);
+			pthread_mutex_lock(&philo->writing);
 			printf("%zums	%d died", get_time() - philo->time, philo->id);
-			// dest_mutex(philo);
+			pthread_mutex_unlock(&philo->writing);
+			dest_mutex(philo);
 			// free_param(philo, philo->mutex, var);
 			return ;
 		}
@@ -49,9 +63,9 @@ void	loop_func(t_philo *philo, t_data *data)
 
 int	main(int ac, char **av)
 {
-	t_data		*data;
-	pthread_t	*threads;
-	t_philo		*philos;
+	t_data			*data;
+	pthread_t		*threads;
+	t_philo			*philos;
 	
 	if (ac == 5 || ac == 6)
 	{

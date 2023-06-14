@@ -25,15 +25,16 @@ typedef struct s_data
 typedef struct s_philo
 {
 	int				eat;
+	int				i;
 	int				total_eat;
 	size_t			time;
-	size_t			time_meal;
+	size_t			last_meal;
 	int				time_sleep;
 	int				time_die;
 	int				id;
 	t_data			*data;
-	pthread_mutex_t	*fork;
-	pthread_mutex_t	*writing;
+	pthread_mutex_t	fork;
+	pthread_mutex_t	writing;
 	int				u_fork;
 }					t_philo;
 
